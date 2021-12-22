@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-br">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie-edge">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie-edge">
+  <title>Centro Cirurgico</title>
+</head>
+
+<body>
+</body>
+
+<body>
+
+
+
+  <form class="form" th:action="@{/login}" method="post">
+    <div class="card">
+      <div class="card-top">
+        <img class="imglogin"
+          src="https://i0.wp.com/agroemdia.com.br/wp-content/uploads/2018/03/logo-sec-saude-df.png?w=985&ssl=1" alt=""
+          width="200" height="100">
+        <h2 class="title">Hospital Regional de Taguatinga</h2>
+
+        <p>
+        <h2></h2>
+        </p>
+      </div>
+
+      <div class="card-group">
+        <label>Nome</label>
+        <input type="text" name="username" placeholder="Digite seu Usuário" required>
+      </div>
+
+      <div class="valid">
+        <div th:if="${param.error}">
+          Nome de usuário ou senha inválidos.
+        </div>
+
+        <div class="card-group">
+          <label>Senha</label>
+          <input type="password" name="password" placeholder="Digite sua Senha" required>
+        </div>
+
+        <div class="valid">
+          <div th:if="${param.logout}">
+            Você foi desconectado.
+          </div>
+
+          <div class="card-group btn">
+            <p></p><button type="submit">LOGIN</button>
+          </div>
+        </div>
+  </form>
+
+</body>
+
+</html>
+
+</html>

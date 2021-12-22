@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-br">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie-edge">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  
+<head>
+    <title>Centro Cirurgico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" class="btn btn-danger" value="Sair" />
+       
+    </form>
+
+    <script>
+
+        lsUser = []
+        function save() {
+            const xhttp = new XMLHttpRequest();
+            id = document.getElementById("id").value;
+            name = document.getElementById("name").value;
+            status = document.getElementById("status").value;
+            local = document.getElementById("local").value;
+            propsedTime = document.getElementById("propsedTime").value;
+            actualStartTime = document.getElementById("actualStartTime").value;
+            endTime = document.getElementById("endTime").value;
+            exitTime = document.getElementById("exitTime").value;
+
+            if (nome == '') {
+                alert('O Nome do Paciente é obrigatório.');
+                return false;
+            }
+
+            if (id > 0) {
+                xhttp.open("PUT", `/user/${id}?name=${name}&status=${status}&local=${local}&propsedTime=${propsedTime}&actualStartTime=${actualStartTime}&endTime=${endTime}&exitTime=${exitTime}`);
+            } else {
+                xhttp.open("POST", `/user/?name=${name}&status=${status}&local=${local}&propsedTime=${propsedTime}&actualStartTime=${actualStartTime}&endTime=${endTime}&exitTime=${exitTime}`);
+            }
+
+            xhttp.send();
+            xhttp.onload = function () {
+                alert(this.responseText);
+                listAllUser();
+                clearForm();
+            }
+        }
+         function listAllUser() {
+
+           const xhttp = new XMLHttpRequest();
+            xhttp.open("GET", `/user/`);
+            xhttp.send();
+            xhttp.onload = function () {
+                lsUser = JSON.parse(this.responseText);
+                out = "";
+                for (const i in lsUser) {
+                  
+                    u = lsUser[i]
+                    try {
+                        cor = fStatus(u.status).cor  
+                       
+                    } catch (error) {
+
+                    }
+
+                    out += `<tr onclick='activate(${i})'><td>${u.name}</td>
+                                                         <td style="background-color: ${cor}"> ${u.status}</td>
+                                                         <td>${u.local}</td>
+                                                         <td>${u.propsedTime}</td>
+                                                         <td>${u.actualStartTime}</td>
+                                                         <td>${u.endTime}</td>
+                                                         <td>${u.exitTime}</td>
+                            </tr>`;
+                }
+                document.getElementById("tbody").innerHTML = out;
+            }
+        }
+        function activate(id) {
+            u = lsUser[id]
+            document.getElementById("id").value = u.id;
+            document.getElementById("name").value = u.name;
+            document.getElementById("status").value = u.status;
+            document.getElementById("local").value = u.local;
+            document.getElementById("propsedTime").value = u.propsedTime;
+            document.getElementById("actualStartTime").value = u.actualStartTime;
+            document.getElementById("endTime").value = u.endTime;
+            document.getElementById("extiTime").value = u.exitTime;
+
+        }
+        function clearForm() {
+            document.getElementById("id").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("status").value = "";
+            document.getElementById("local").value = "";
+            document.getElementById("propsedTime").value = "";
+            document.getElementById("actualStartTime").value = "";
+            document.getElementById("endTime").value = "";
+            document.getElementById("exitTime").value = "";
+        }
+        function deleteUser() {
+            const xhttp = new XMLHttpRequest();
+            id = document.getElementById("id").value;
+            xhttp.open("DELETE", `/user/${id}`);
+            xhttp.send();
+            xhttp.onload = function () {
+                alert(this.responseText);
+                listAllUser();
+                clearForm();
+            }
+        }
+
+        function fStatus(status) {
+            console.log(status)
+            switch (status) {
+                case 'Pré Operatório':
+                    return {
+                        label: 'Pré-Operatório',
+                        cor: '#eff307'
+                    };
+                case 'Sala de Cirurgia':
+                    return {
+                        label: 'Sala de Cirurgia',
+                        cor: '#1648ec'
+                    };
+                case 'Sala de Recuperacao':
+                    return {
+                        label: 'Sala de Recuperacao',
+                        cor: '#ec1d16'
+                    };
+                case 'Transferído':
+                    return {
+                        label: 'Transferído',
+                        cor: '#16ec56'
+                    };
+            }
+
+
+        }
+
+    </script>
+
+    <div class="container mt-3">
+        <div class="row">
+
+            <div>
+                <h2 class="col mt-1"> Pacientes no Centro Cirúrgico<samp id="view"></samp></h2>
+            </div>
+        </div>
+
+        <form>
+
+            <div class="row mb-3 mt-3">
+
+                <div class="col">
+                    <input type="hidden" id="id" name="id">
+                    <label for="name">Nome:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+
+                </div>
+
+
+                <div class="col">
+                    <style type="cores/css"></style>
+                    <label for="status">Status:</label>
+                    <select class="form-select" id="status" name="status">
+                        <option style="background-color: #bfc21c;" value="Pré Operatório">Pré Operatório </option>
+                        <option style="background-color: #1f43b9;" value="Sala de Cirurgia">Sala de Cirurgia</option>
+                        <option style="background-color: #ca2822;" value="Sala de Recuperacao">Sala de Recuperação
+                        </option>
+                        <option style="background-color: #187e37;" value="Transferído">Transferído</option>
+                        </style>
+                    </select>
+                </div>
+
+
+
+
+
+                <div class="col">
+                    <label for="local">Local:</label>
+                    <select class="form-select" id="local" name="local">
+                        <option>Sala</option>
+                        <option>Quarto</option>
+                    </select>
+                </div>
+
+
+                <div class="row p-3">
+                    <div class="col">
+                        <label for="propsedTime">Início Previsto: </label>
+                        <input type="time" class="form-control" id="propsedTime" name="propsedTime">
+                    </div>
+                    <div class="col">
+                        <label for="actualStartTime">Início Cirurgia: </label>
+                        <input type="time" class="form-control" id="actualStartTime" name="actualStartTime">
+                    </div>
+                    <div class="col">
+                        <label for="endTime">Fim da Cirurgia: </label>
+                        <input type="time" class="form-control" id="endTime" name="endTime">
+                    </div>
+                    <div class="col">
+                        <label for="exitTime">Saída da Cirurgia: </label>
+                        <input type="time" class="form-control" id="exitTime" name="exitTime">
+                    </div>
+                </div>
+
+
+                <div>
+                    <button type="button" class="btn btn-primary" onclick="save()">Salvar</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteUser()">Delete</button>
+
+                    <a href="/gerenciar" class="btn btn-success" role="button">Painel</a>
+
+                </div>
+                <table class="table table-hover" style="cursor: pointer;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+        
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    </div>
+
+
+    <div class="container mt-3">
+        <table class="table table-hover" style="cursor: pointer;">
+            <thead class="table-success">
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Status</th>
+                            <th>Local</th>
+                            <th>Início Previsto</th>
+                            <th>Início Cirurgia</th>
+                            <th>Fim da Cirurgia</th>
+                            <th>Saida Prevista</th>
+                        </tr>
+                    </thead>
+                    <tbody style="cursor: pointer;" id="tbody">
+                    </tbody>
+                </table>
+    </div>
+    <script>listAllUser()</script>
+</body>
+
+
+
+
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-br">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="20">
+  <meta http-equiv="X-UA-Compatible" content="ie-edge">
+  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+     <form th:action="@{/logout}" method="post">
+        <input type="submit" class="btn btn-danger" value="Sair" />
+<head>
+    <title>Centro Cirurgico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+
+
+
+    <script>
+        lsUser = []
+    function listAllUser() {
+
+const xhttp = new XMLHttpRequest();
+ xhttp.open("GET", `/user/`);
+ xhttp.send();
+ xhttp.onload = function () {
+     lsUser = JSON.parse(this.responseText);
+     out = "";
+     for (const i in lsUser) {
+         u = lsUser[i]
+         try {
+             cor = fStatus(u.status).cor  
+         } catch (error) {
+
+         }
+
+         out += `<tr onclick='activate(${i})'><td>${u.name}</td>
+                                              <td style="background-color: ${cor}"> ${u.status}</td>
+                                              <td>${u.local}</td>
+                                              <td>${u.propsedTime}</td>
+                                              <td>${u.actualStartTime}</td>
+                                              <td>${u.endTime}</td>
+                                              <td>${u.exitTime}</td>
+                 </tr>`;
+     }
+     document.getElementById("tbody").innerHTML = out;
+ }
+}
+          
+        function fStatus(status) {
+            console.log(status)
+            switch (status) {
+                case 'Pré Operatório':
+                    return {
+                        label: 'Pré-Operatório',
+                        cor: '#eff307'
+                    };
+                case 'Sala de Cirurgia':
+                    return {
+                        label: 'Sala de Cirurgia',
+                        cor: '#1648ec'
+                    };
+                case 'Sala de Recuperacao':
+                    return {
+                        label: 'Sala de Recuperacao',
+                        cor: '#ec1d16'
+                    };
+                case 'Transferído':
+                    return {
+                        label: 'Transferído',
+                        cor: '#16ec56'
+                    };
+            }
+
+
+        }
+
+    </script>
+    <div class="container mt-3">
+        <div class="=row">
+            <div class="d-flex justify-content-start col">
+                <img src="https://i0.wp.com/agroemdia.com.br/wp-content/uploads/2018/03/logo-sec-saude-df.png?w=985&ssl=1"
+                    alt="" width="200" height="100">
+            </div>
+
+        </div>
+
+
+        <div>
+            <form>
+                <h5> Regional Hospital Taguatinga | Secretaria de Estado de Saúde do Distrito Federal | 
+                    
+                    <script type="text/javascript">
+                        function time()
+                        {
+                        today=new Date();
+                        h=today.getHours();
+                        m=today.getMinutes();
+                        s=today.getSeconds();
+                        document.getElementById('txt').innerHTML=h+":"+m+":"+s;
+                        setTimeout('time()',500);
+                        }
+                        </script>
+                        </head>
+                        <body onload="time()">
+                            <div id="txt"></div>
+
+                            <span id = "dt-hora"></span>
+                        
+        </div>
+        <div class="col">
+            <a href="/manager" class="btn btn-primary" role="button">Gerenciar</a>
+
+
+
+
+
+            <div class="container mt-3">
+                <table class="table table-hover" style="cursor: pointer;">
+                    <thead class="table-success">
+                        <tr>
+                            <th width="39%">Paciente</th>
+                            <th width="20%">Status</th>
+                            <th width="20%">Local</th>
+                            <th width="10%">Início Previsto</th>
+                            <th width="10%">Início Cirurgia</th>
+                            <th width="10%">Fim da Cirurgia</th>
+                            <th width="10%">Saída da Cirurgia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>
+
+        <script>listAllUser();</script>
+</body>
+
+</html>
